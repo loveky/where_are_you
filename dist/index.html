@@ -2,12 +2,20 @@
 <html>
   <head>
     <title>Test</title>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/lib.css">
 
     <link rel="stylesheet" href="css/application.css">
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="map" class="col-xs-12 col-md-6"></div>
+        <div id="messageBox" class="col-xs-12 col-md-6"></div>
+      </div>
+    </div>
 
     <script src="js/lib.js"></script>
     <script src="http://api.map.baidu.com/api?v=1.5&ak=5c15ea472e1bc59b933dd5b16ef92a1b" type="text/javascript"></script>

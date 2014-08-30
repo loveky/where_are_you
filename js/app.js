@@ -2,7 +2,10 @@
   var myFirebaseRef;
   var geoFire;
 
-  var myName = prompt("Please enter your name");
+  var myName;
+  while(!$.trim(myName)) {
+    myName = prompt("Please enter your name");
+  }
   var myPosition;
   var geoQuery;
   var friends;

@@ -2,8 +2,16 @@
   height: 350px;
 }
 
-#messageBox {
+/*#messageBox {
   height: 350px;
   border: 2px solid green;
   overflow-y:auto;
+}*/
+
+.BMapLabel {
+  max-width: none;
+}
+
+.navbar {
+  margin-bottom: 0;
 }

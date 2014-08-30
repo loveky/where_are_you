@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Test</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- build:css css/lib.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
+  	<title>Where are you?</title>
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<!-- build:css css/lib.css -->
+  	<!-- bower:css -->
+  	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  	<!-- endbower -->
+  	<!-- endbuild -->
 
-    <!-- build:css css/application.css -->
-    <link rel="stylesheet" href="css/app.css">
-    <!-- endbuild -->
+  	<!-- build:css css/application.css -->
+  	<link rel="stylesheet" href="css/app.css">
+  	<!-- endbuild -->
   </head>
   <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Where are you?</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+          </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Room ID">
+            </div>
+            <button type="submit" class="btn btn-default">Enter</button>
+          </form>
+        </div>
+      </div>
+    </nav>
     <div class="container-fluid">
       <div class="row">
-        <div id="map" class="col-xs-12 col-md-6"></div>
-        <div id="messageBox" class="col-xs-12 col-md-6"></div>
+        <div id="map" class="col-xs-12"></div>
       </div>
     </div>
 
@@ -32,6 +54,7 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+    <script src="bower_components/noty/js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script src="http://api.map.baidu.com/api?v=1.5&ak=5c15ea472e1bc59b933dd5b16ef92a1b" type="text/javascript"></script>
     <script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
     <!-- build:js js/application.js -->

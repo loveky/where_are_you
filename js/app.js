@@ -1,23 +1,24 @@
 (function(window, $) {
-
   var myFirebaseRef;
   var geoFire;
-  var map = window.map = new BMap.Map("map");
-  map.addControl(new BMap.ScaleControl());
-  map.addControl(new BMap.NavigationControl());
-  map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
 
   var myName = prompt("Please enter your name");
   var myPosition;
   var geoQuery;
   var friends;
   var setIntervalTimer;
-
   var onFriendEnteredRegistration;
   var onFriendExitedRegistration;
   var onFriendMovedRegistration;
   var initialized = false;
   var myPositionCentered = false;
+  var i;
+
+  var map = window.map = new BMap.Map("map");
+  map.addControl(new BMap.ScaleControl());
+  map.addControl(new BMap.NavigationControl());
+  map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
+
 
   // Config noty plugin
   $.extend($.noty.defaults, {
@@ -68,10 +69,7 @@
     geoFire = new GeoFire(myFirebaseRef);
 
     // clean up all marks
-    var markers = map.getOverlays();
-    for(var i = 0; i < markers.length; i++) {
-      map.removeOverlay(markers[i]);
-    }
+    removeAllMarkers();
 
     map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
     myPositionCentered = false;
@@ -102,14 +100,7 @@
 
       onFriendExitedRegistration = geoQuery.on("key_exited", function(key, location, distance) {
         noty({text: key + " leaved!"});
-        var markers = map.getOverlays();
-        var i = 0;
-        while(i < markers.length) {
-          if(markers[i].getTitle() === key) {
-            map.removeOverlay(markers[i]);
-          }
-          i++;
-        }
+        removeMarker(key);
       });
 
       onFriendMovedRegistration = geoQuery.on("key_moved", function(key, location, distance) {
@@ -144,21 +135,14 @@
 
   function translateCallback(position) {
     debugMessage("经度: " + position.lng + ", 纬度: " + position.lat);
-    // {longitude: position.lng, latitude: position.lat}
     myPosition = position;
-    // updatePosition("You", position);
-    // map.setCenter(new BMap.Point(position.lng, position.lat));
-    // new BMap.Point(116.4035,39.915)
-    shareMyLocation(position);
+    shareMyLocation(myPosition);
   }
 
   function updatePosition(name, position) {
     if(position !== null) {
       var point = new BMap.Point(position[1], position[0]);
       var marker = new BMap.Marker(point);
-      var markers = map.getOverlays();
-      var i = 0;
-
       marker.setTitle(name);
 
       if(name !== myName) {
@@ -169,12 +153,7 @@
         marker.setIcon(friendIcon);
       }
 
-      while(i < markers.length) {
-        if(markers[i].getTitle() === name) {
-          map.removeOverlay(markers[i]);
-        }
-        i++;
-      }
+      removeMarker(name);
 
       map.addOverlay(marker);
 
@@ -185,17 +164,28 @@
     }
   }
 
+  function removeMarker(title) {
+    var markers = map.getOverlays();
+    for(i = 0; i < markers.length; i++) {
+      if(markers[i].getTitle() === title) {
+        map.removeOverlay(markers[i]);
+      }
+    }
+  }
+
+  function removeAllMarkers() {
+    var markers = map.getOverlays();
+    for(var i = 0; i < markers.length; i++) {
+      map.removeOverlay(markers[i]);
+    }
+  }
+
   function shareMyLocation(position) {
     geoFire.set(myName, [position.lat, position.lng]);
   }
 
   function debugMessage(message) {
-    // if($("#messageBox").children().length > 10) {
-    //   $("#messageBox").empty();
-    // }
-
     var currentTime = new Date();
-    // $("<p>" + currentTime.toLocaleTimeString() + " " + message + "</p>").prependTo("#messageBox");
     console.log(currentTime.toLocaleTimeString() + " " + message);
   }
 })(window, window.jQuery);

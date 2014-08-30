@@ -1,21 +1,23 @@
 (function(window, $) {
-  var myFirebaseRef = new Firebase("https://brilliant-fire-2393.firebaseio.com/geofire");
-  var geoFire = new GeoFire(myFirebaseRef);
 
+  var myFirebaseRef;
+  var geoFire;
   var map = window.map = new BMap.Map("map");
   map.addControl(new BMap.ScaleControl());
   map.addControl(new BMap.NavigationControl());
-
   map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
 
   var myName = prompt("Please enter your name");
   var myPosition;
   var geoQuery;
-  var friends = {};
+  var friends;
+  var setIntervalTimer;
 
   var onFriendEnteredRegistration;
   var onFriendExitedRegistration;
   var onFriendMovedRegistration;
+  var initialized = false;
+  var myPositionCentered = false;
 
   // Config noty plugin
   $.extend($.noty.defaults, {
@@ -25,26 +27,62 @@
     type: "information"
   });
 
-  // dataRef.on("value", function(snapshot) {
-  //   var position = snapshot.val();
-  //   if(position !== null) {
-  //     var point = new BMap.Point(position.longitude, position.latitude);
-  //     var marker = new BMap.Marker(point);
+  var currentRoomID = window.location.hash.substr(1) || "default";
+  enterRoom(currentRoomID);
 
-  //     var markers = map.getOverlays();
-  //     var i = 0;
-  //     while(i < markers.length) {
-  //       map.removeOverlay(markers[i]);
-  //       i++;
-  //     }
+  $("#changeRoom").on("click", changeHash);
+  $(window).on("hashchange", changeRoom);
 
-  //     map.addOverlay(marker);
-  //     map.centerAndZoom(point, 18);
-  //   }
-  // });
+  function changeHash() {
+    event.preventDefault();
 
-  findFriends();
-  setInterval(getMyPosition, 5000);
+    var $this = $(this);
+    var roomID = $this.siblings().find("input").val();
+
+    if($.trim(roomID) !== "" && $.trim(roomID) !== window.location.hash.substr(1)) {
+      window.location.hash = roomID;
+    }
+  }
+
+  function changeRoom(event) {
+    event.preventDefault();
+
+    if(currentRoomID !== window.location.hash.substr(1)){
+      // leave current room
+      geoFire.remove(myName);
+
+      currentRoomID = window.location.hash.substr(1);
+      enterRoom(currentRoomID);
+    }
+  }
+
+
+  function enterRoom(roomID) {
+    if(initialized) {
+      clearInterval(setIntervalTimer);
+      geoQuery.cancel();
+    }
+
+    // initialize geoFire data reference
+    myFirebaseRef = new Firebase("https://brilliant-fire-2393.firebaseio.com/where_are_u/" + roomID);
+    geoFire = new GeoFire(myFirebaseRef);
+
+    // clean up all marks
+    var markers = map.getOverlays();
+    for(var i = 0; i < markers.length; i++) {
+      map.removeOverlay(markers[i]);
+    }
+
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
+    myPositionCentered = false;
+
+    friends = {};
+
+    // start query friends position
+    findFriends();
+    setIntervalTimer = setInterval(getMyPosition, 5000);
+    initialized = true;
+  }
 
   /////////////////////////
   // Function defination //
@@ -64,6 +102,14 @@
 
       onFriendExitedRegistration = geoQuery.on("key_exited", function(key, location, distance) {
         noty({text: key + " leaved!"});
+        var markers = map.getOverlays();
+        var i = 0;
+        while(i < markers.length) {
+          if(markers[i].getTitle() === key) {
+            map.removeOverlay(markers[i]);
+          }
+          i++;
+        }
       });
 
       onFriendMovedRegistration = geoQuery.on("key_moved", function(key, location, distance) {
@@ -132,8 +178,9 @@
 
       map.addOverlay(marker);
 
-      if(name === myName){
+      if(!myPositionCentered && name === myName){
         map.setCenter(point);
+        myPositionCentered = true;
       }
     }
   }

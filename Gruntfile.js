@@ -28,7 +28,8 @@ module.exports = function(grunt) {
     copy: {
       dist: {
         files: [ 
-          {src: 'index.html', dest: 'dist/index.html'}
+          {src: 'index.html', dest: 'dist/index.html'},
+          {src: 'github-btn.html', dest: 'dist/github-btn.html'}
         ]
       }
     },

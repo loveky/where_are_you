@@ -4,7 +4,7 @@
 
   var myName;
   while(!$.trim(myName)) {
-    myName = prompt("Please enter your name");
+    myName = prompt("你的大名(用于显示给其他用户):");
   }
   var myPosition;
   var geoQuery;
@@ -97,18 +97,18 @@
       });
 
       onFriendEnteredRegistration = geoQuery.on("key_entered", function(key, location, distance) {
-        noty({text: key + " came in!"});
+        noty({text: key + " 进入房间"});
         updatePosition(key, location);
       });
 
       onFriendExitedRegistration = geoQuery.on("key_exited", function(key, location, distance) {
-        noty({text: key + " leaved!"});
+        noty({text: key + " 离开房间"});
         removeMarker(key);
       });
 
       onFriendMovedRegistration = geoQuery.on("key_moved", function(key, location, distance) {
         debugMessage(key + " moved!");
-        location = [39.923482425424 + Math.random()/100, 116.58900186593 + Math.random() / 100];
+        // location = [39.923482425424 + Math.random()/100, 116.58900186593 + Math.random() / 100];
         updatePosition(key, location);
       });
     }

@@ -10,7 +10,6 @@
   var onFriendEnteredRegistration;
   var onFriendExitedRegistration;
   var onFriendMovedRegistration;
-  var initialized = false;
   var myPositionCentered = false;
   var i;
   var currentRoomID;
@@ -88,10 +87,8 @@
   }
 
   function enterRoom(roomID) {
-    if(initialized) {
-      clearInterval(setIntervalTimer);
-      geoQuery.cancel();
-    }
+    try {clearInterval(setIntervalTimer);} catch(e) {}
+    try {geoQuery.cancel();} catch(e) {}
 
     // initialize geoFire data reference
     myFirebaseRef = new Firebase("https://brilliant-fire-2393.firebaseio.com/where_are_u/" + roomID);

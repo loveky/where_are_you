@@ -68,7 +68,7 @@
     event.preventDefault();
 
     var $this = $(this);
-    var roomID = $this.siblings().find("input").val();
+    var roomID = $this.closest("form").find("input").val();
 
     if($.trim(roomID) !== "" && $.trim(roomID) !== window.location.hash.substr(1)) {
       window.location.hash = roomID;

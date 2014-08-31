@@ -41,6 +41,11 @@
   $(window).on("resize", resizeMap)
     .trigger("resize");
 
+
+  /////////////////////////
+  // Function defination //
+  /////////////////////////
+
   function resizeMap() {
     var height = $(window).innerHeight() - $("nav.navbar").height();
     $("#map").height(height);
@@ -82,7 +87,6 @@
     }
   }
 
-
   function enterRoom(roomID) {
     if(initialized) {
       clearInterval(setIntervalTimer);
@@ -106,10 +110,6 @@
     setIntervalTimer = setInterval(getMyPosition, 5000);
     initialized = true;
   }
-
-  /////////////////////////
-  // Function defination //
-  /////////////////////////
 
   function findFriends() {
     if(myPosition !== undefined) {
@@ -136,7 +136,6 @@
       setTimeout(findFriends, 1000);
     }
   }
-
 
   function getMyPosition() {
     if (!navigator.geolocation){
@@ -176,7 +175,6 @@
       }
 
       removeMarker(name);
-
       map.addOverlay(marker);
 
       if(!myPositionCentered && name === myName){

@@ -3,9 +3,6 @@
   var geoFire;
 
   var myName;
-  // while(!$.trim(myName)) {
-  //   myName = prompt("你的大名(用于显示给其他用户):");
-  // }
   var myPosition;
   var geoQuery;
   var friends;
@@ -22,7 +19,6 @@
   map.addControl(new BMap.ScaleControl());
   map.addControl(new BMap.NavigationControl());
   map.centerAndZoom(new BMap.Point(116.404, 39.915), 17);
-
 
   // Config noty plugin
   $.extend($.noty.defaults, {
@@ -133,8 +129,6 @@
       });
 
       onFriendMovedRegistration = geoQuery.on("key_moved", function(key, location, distance) {
-        debugMessage(key + " moved!");
-        // location = [39.923482425424 + Math.random()/100, 116.58900186593 + Math.random() / 100];
         updatePosition(key, location);
       });
     }
@@ -163,7 +157,6 @@
   }
 
   function translateCallback(position) {
-    debugMessage("经度: " + position.lng + ", 纬度: " + position.lat);
     myPosition = position;
     shareMyLocation(myPosition);
   }
@@ -211,10 +204,5 @@
 
   function shareMyLocation(position) {
     geoFire.set(myName, [position.lat, position.lng]);
-  }
-
-  function debugMessage(message) {
-    var currentTime = new Date();
-    console.log(currentTime.toLocaleTimeString() + " " + message);
   }
 })(window, window.jQuery);

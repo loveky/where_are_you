@@ -42,6 +42,13 @@
   $(window).on("hashchange", changeRoom);
   $("#askForNameModal input").on("keyup", checkNameInput);
   $("#askForNameModal button").on("click", setMyName);
+  $(window).on("resize", resizeMap)
+    .trigger("resize");
+
+  function resizeMap() {
+    var height = $(window).innerHeight() - $("nav.navbar").height();
+    $("#map").height(height);
+  }
 
   function checkNameInput() {
     var $this = $(this);

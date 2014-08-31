@@ -3,9 +3,9 @@
   var geoFire;
 
   var myName;
-  while(!$.trim(myName)) {
-    myName = prompt("你的大名(用于显示给其他用户):");
-  }
+  // while(!$.trim(myName)) {
+  //   myName = prompt("你的大名(用于显示给其他用户):");
+  // }
   var myPosition;
   var geoQuery;
   var friends;
@@ -16,6 +16,7 @@
   var initialized = false;
   var myPositionCentered = false;
   var i;
+  var currentRoomID;
 
   var map = window.map = new BMap.Map("map");
   map.addControl(new BMap.ScaleControl());
@@ -31,11 +32,29 @@
     type: "information"
   });
 
-  var currentRoomID = window.location.hash.substr(1) || "default";
-  enterRoom(currentRoomID);
+  $("#askForNameModal").modal({keyboard: false, show: true, backdrop: "static"})
+    .on("hidden.bs.modal", function() {
+      currentRoomID = window.location.hash.substr(1) || "default";
+      enterRoom(currentRoomID);
+    });
 
   $("#changeRoom").on("click", changeHash);
   $(window).on("hashchange", changeRoom);
+  $("#askForNameModal input").on("keyup", checkNameInput);
+  $("#askForNameModal button").on("click", setMyName);
+
+  function checkNameInput() {
+    var $this = $(this);
+    $this.closest(".modal-content")
+      .find("button")
+      .attr("disabled", $.trim($this.val()) === "");
+  }
+
+  function setMyName() {
+    var $this = $(this);
+    myName = $.trim($("#askForNameModal input").val());
+    $("#askForNameModal").modal("hide");
+  }
 
   function changeHash() {
     event.preventDefault();
